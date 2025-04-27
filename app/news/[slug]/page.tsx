@@ -1,5 +1,6 @@
 import * as mockNews from '@/mock-news.json'
 import Image from 'next/image'
+import { notFound } from 'next/navigation'
 
 export default async function NewsDetailPage({
   params
@@ -8,7 +9,7 @@ export default async function NewsDetailPage({
 }) {
   const { slug } = await params
   const item = mockNews.find(item => item.slug === slug)
-  if (!item) return
+  if (!item) notFound()
 
   return (
     <article className="news-article">
