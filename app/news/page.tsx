@@ -1,16 +1,25 @@
+import * as mockNews from '@/mock-news.json'
+import Image from 'next/image'
 import Link from 'next/link'
 
-export default function News() {
+export default function NewsPage() {
   return (
     <>
       <h1>News Page</h1>
-      <ul>
-        <li>
-          <Link href="/news/first-news">First News Item</Link>
-        </li>
-        <li>
-          <Link href="/news/second-news">Second News Item</Link>
-        </li>
+      <ul className="news-list">
+        {mockNews.map(item => (
+          <li key={item.id}>
+            <Link href={`/news/${item.slug}`}>
+              <Image
+                src={`/images/${item.image}`}
+                alt={item.title}
+                height={400}
+                width={400}
+              />
+              <span>{item.title}</span>
+            </Link>
+          </li>
+        ))}
       </ul>
     </>
   )
