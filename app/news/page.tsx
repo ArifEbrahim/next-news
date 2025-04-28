@@ -1,13 +1,15 @@
-import * as mockNews from '@/mock-news.json'
 import Image from 'next/image'
 import Link from 'next/link'
+import { getAllArticles } from '@/lib/actions'
 
-export default function NewsPage() {
+export default async function NewsPage() {
+  const articles = await getAllArticles()
+
   return (
     <>
       <h1>News Page</h1>
       <ul className="news-list">
-        {mockNews.map(item => (
+        {articles.map(item => (
           <li key={item.id}>
             <Link href={`/news/${item.slug}`}>
               <Image

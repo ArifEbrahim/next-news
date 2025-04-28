@@ -143,6 +143,10 @@ ul {
   align-items: center;
 }
 
+.image-container{
+  height: 900px;
+}
+
 .news-article img {
   width: 7rem;
   margin-bottom: 1rem;

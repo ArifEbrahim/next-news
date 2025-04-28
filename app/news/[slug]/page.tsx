@@ -1,4 +1,4 @@
-import * as mockNews from '@/mock-news.json'
+import { getOneArticle } from '@/lib/actions'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
@@ -8,17 +8,19 @@ export default async function NewsDetailPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const item = mockNews.find(item => item.slug === slug)
-  if (!item) notFound()
+  const article = await getOneArticle(slug)
+  if (!article) notFound()
 
   return (
     <article className="news-article">
       <header>
-        <Image src={`/images/${item.image}`} alt={item.title} />
-        <h1>{item.title}</h1>
-        <time dateTime={item.date}>{item.date}</time>
+        <div className='image-container'>
+          <Image src={`/images/${article.image}`} alt={article.title} fill/>
+        </div>
+        <h1>{article.title}</h1>
+        <time dateTime={article.date}>{article.date}</time>
       </header>
-      <p>{item.content}</p>
+      <p>{article.content}</p>
     </article>
   )
 }
