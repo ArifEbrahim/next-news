@@ -14,9 +14,12 @@ export default async function NewsDetailPage({
   return (
     <article className="news-article">
       <header>
-        <div className='image-container'>
-          <Image src={`/images/${article.image}`} alt={article.title} fill/>
-        </div>
+        <Image
+          src={`/images/${article.image}`}
+          alt={article.title}
+          height={900}
+          width={900}
+        />
         <h1>{article.title}</h1>
         <time dateTime={article.date}>{article.date}</time>
       </header>
