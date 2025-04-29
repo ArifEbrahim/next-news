@@ -1,5 +1,9 @@
 export default function ArchivePage() {
   return (
-    <div>archive page</div>
+    <header id="archive-header">
+      <nav>
+        <ul></ul>
+      </nav>
+    </header>
   )
 }

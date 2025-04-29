@@ -1,6 +1,6 @@
+import { getAllArticles } from '@/lib/articles'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getAllArticles } from '@/lib/actions'
 
 export default async function NewsPage() {
   const articles = await getAllArticles()

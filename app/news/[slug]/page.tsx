@@ -1,4 +1,4 @@
-import { getOneArticle } from '@/lib/actions'
+import { getOneArticle } from '@/lib/articles'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
