@@ -18,14 +18,23 @@ export default async function FilteredNewsPage({
   const selectedMonth = filter?.[1]
 
   let articles: Article[] = []
-  let links = await getArticleYears()
+  const availableArticleYears = await getArticleYears()
+  const availableArticleMonths = await getArticleMonths(selectedYear)
+  let links = availableArticleYears
 
   if (selectedYear && !selectedMonth) {
     articles = await getArticlesForYear(selectedYear)
-    links = await getArticleMonths(selectedYear)
+    links = availableArticleMonths
   } else if (selectedYear && selectedMonth) {
     articles = await getArticleForYearAndMonth(selectedYear, selectedMonth)
     links = []
+  }
+
+  const isNoNewsForYear = selectedYear && !availableArticleYears.includes(+selectedYear)
+  const isNoNewsForMonth = selectedMonth && !availableArticleMonths.includes(+selectedMonth)
+
+  if(isNoNewsForMonth || isNoNewsForYear) {
+    throw new Error('invalid filter')
   }
 
   return (
