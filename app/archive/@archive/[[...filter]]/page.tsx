@@ -1,5 +1,11 @@
 import NewsList from '@/components/news-list'
-import { getArticlesForYear, getArticleYears } from '@/lib/articles'
+import {
+  getArticleForYearAndMonth,
+  getArticleMonths,
+  getArticlesForYear,
+  getArticleYears
+} from '@/lib/articles'
+import { Article } from '@/types/article'
 import Link from 'next/link'
 
 export default async function FilteredNewsPage({
@@ -8,19 +14,36 @@ export default async function FilteredNewsPage({
   params: Promise<{ filter: string[] }>
 }) {
   const { filter } = await params
-  const articles = filter ? await getArticlesForYear(filter[0]) : []
-  const links = await getArticleYears()
-  
+  const selectedYear = filter?.[0]
+  const selectedMonth = filter?.[1]
+
+  let articles: Article[] = []
+  let links = await getArticleYears()
+
+  if (selectedYear && !selectedMonth) {
+    articles = await getArticlesForYear(selectedYear)
+    links = await getArticleMonths(selectedYear)
+  } else if (selectedYear && selectedMonth) {
+    articles = await getArticleForYearAndMonth(selectedYear, selectedMonth)
+    links = []
+  }
+
   return (
     <>
       <header id="archive-header">
         <nav>
           <ul>
-            {links.map(link => (
-              <li key={link}>
-                <Link href={`/archive/${link}`}>{link}</Link>
-              </li>
-            ))}
+            {links.map(link => {
+              const href = selectedYear
+                ? `/archive/${selectedYear}/${link}`
+                : `/archive/${link}`
+
+              return (
+                <li key={link}>
+                  <Link href={href}>{link}</Link>
+                </li>
+              )
+            })}
           </ul>
         </nav>
       </header>
