@@ -8,8 +8,9 @@ export default async function FilteredNewsPage({
   params: Promise<{ filter: string[] }>
 }) {
   const { filter } = await params
-  const articles = await getArticlesForYear(filter[0])
+  const articles = filter ? await getArticlesForYear(filter[0]) : []
   const links = await getArticleYears()
+  
   return (
     <>
       <header id="archive-header">
