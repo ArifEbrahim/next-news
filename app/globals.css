@@ -143,6 +143,11 @@ ul {
   align-items: center;
 }
 
+.image-container{
+  display: flex;
+  justify-content: center;
+}
+
 .news-article img {
   margin-bottom: 1rem;
   border-radius: 4px;

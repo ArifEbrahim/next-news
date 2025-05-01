@@ -1,5 +1,6 @@
 import { getOneArticle } from '@/lib/articles'
 import Image from 'next/image'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 export default async function NewsDetailPage({
@@ -14,12 +15,16 @@ export default async function NewsDetailPage({
   return (
     <article className="news-article">
       <header>
-        <Image
-          src={`/images/${article.image}`}
-          alt={article.title}
-          height={900}
-          width={900}
-        />
+        <Link href={`/news/${article.slug}/image`}>
+          <div className='image-container'>
+            <Image
+              src={`/images/${article.image}`}
+              alt={article.title}
+              height={500}
+              width={500}
+            />
+          </div>
+        </Link>
         <h1>{article.title}</h1>
         <time dateTime={article.date}>{article.date}</time>
       </header>
