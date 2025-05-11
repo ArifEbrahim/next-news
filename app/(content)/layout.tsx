@@ -1,18 +1,19 @@
-import './globals.css'
+import MainHeader from '@/components/main-header'
 
 export const metadata = {
   title: 'Next.js Page Routing & Rendering',
   description: 'Learn how to route to different pages.'
 }
 
-export default function RootLayout({
+export default function ContentLayout({
   children
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <div id="page">
+      <MainHeader />
+      {children}
+    </div>
   )
 }
