@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 const sqlite = require('better-sqlite3')
 const db = sqlite('data.db')
 

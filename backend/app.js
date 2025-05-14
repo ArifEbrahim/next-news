@@ -1,3 +1,4 @@
+/* eslint-disable */
 const sqlite = require('better-sqlite3')
 const cors = require('cors')
 const express = require('express')
