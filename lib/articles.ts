@@ -1,5 +1,8 @@
 import { Article } from '@/types/article'
+import sql from 'better-sqlite3'
 import { promises as fs } from 'fs'
+
+const db = sql('data.db')
 
 const parseData = async () => {
   const file = await fs.readFile(process.cwd() + '/mock-news.json', 'utf8')
@@ -8,7 +11,8 @@ const parseData = async () => {
 
 // getAllNews
 export const getAllArticles = async () => {
-  return await parseData()
+  await new Promise(resolve => setTimeout(resolve, 2000))
+  return db.prepare('SELECT * FROM news').all() as Article[]
 }
 
 export const getOneArticle = async (
