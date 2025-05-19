@@ -1,71 +1,71 @@
 import { Article } from '@/types/article'
 import sql from 'better-sqlite3'
-import { promises as fs } from 'fs'
 
 const db = sql('data.db')
 
-const parseData = async () => {
-  const file = await fs.readFile(process.cwd() + '/mock-news.json', 'utf8')
-  return JSON.parse(file) as Article[]
+const addDelay = async () =>
+  await new Promise(resolve => setTimeout(resolve, 2000))
+
+interface SQLData {
+  year?: string
+  month?: string
 }
 
 // getAllNews
 export const getAllArticles = async () => {
-  await new Promise(resolve => setTimeout(resolve, 2000))
+  await addDelay()
   return db.prepare('SELECT * FROM news').all() as Article[]
 }
 
-export const getOneArticle = async (
-  slug: string
-): Promise<Article | undefined> => {
-  const data = await parseData()
-  return data.find(item => item.slug === slug)
+// getNewsItem
+export const getOneArticle = async (slug: string): Promise<Article> => {
+  await addDelay()
+  const article = db
+    .prepare('SELECT * FROM news WHERE slug = ?')
+    .get(slug) as Article
+  return article
 }
 
 // getLatestNews
 export const getLatestArticles = async () => {
-  return (await parseData()).slice(0, 3)
+  await addDelay()
+  const latestArticles = db
+    .prepare('SELECT * FROM news ORDER BY date DESC LIMIT 3')
+    .all() as Article[]
+  return latestArticles
 }
 
 // getAvailableNewsYears
 export const getArticleYears = async () => {
-  const articleYears = (await parseData()).reduce<number[]>(
-    (years, article) => {
-      const year = new Date(article.date).getFullYear()
-      if (!years.includes(year)) {
-        years.push(year)
-      }
-      return years
-    },
-    []
-  )
-  return articleYears.sort((a, b) => b - a)
+  await addDelay()
+  const articleYears = db
+    .prepare("SELECT DISTINCT strftime('%Y', date) as year FROM news")
+    .all() as SQLData[]
+
+  return articleYears.map(year => year.year)
 }
 
 // getAvailableNewsMonths
 export const getArticleMonths = async (year: string) => {
-  const articleMonths = (await parseData()).reduce<number[]>(
-    (months, article) => {
-      const articleDate = new Date(article.date)
-      const articleYear = articleDate.getFullYear()
-      if (articleYear === +year) {
-        const month = articleDate.getMonth()
-        if (!months.includes(month)) {
-          months.push(month + 1)
-        }
-      }
-      return months
-    },
-    []
-  )
-  return articleMonths.sort((a, b) => b - a)
+  await addDelay()
+  const articleMonths = db
+    .prepare(
+      "SELECT DISTINCT strftime('%m', date) as month FROM news WHERE strftime('%Y', date) = ?"
+    )
+    .all(year) as SQLData[]
+
+  return articleMonths.map(month => month.month)
 }
 
 // getNewsForYear
 export const getArticlesForYear = async (year: string) => {
-  return (await parseData()).filter(
-    article => new Date(article.date).getFullYear() === +year
-  )
+  await addDelay()
+  const articles = db
+    .prepare(
+      "SELECT * FROM news WHERE strftime('%Y', date) = ? ORDER BY date DESC"
+    )
+    .all(year)
+  return articles
 }
 
 // getNewsForYearAndMonth
@@ -73,10 +73,11 @@ export const getArticleForYearAndMonth = async (
   year: string,
   month: string
 ) => {
-  return (await parseData()).filter(article => {
-    const articleDate = new Date(article.date)
-    const articleYear = articleDate.getFullYear()
-    const articleMonth = articleDate.getMonth() + 1
-    return articleYear === +year && articleMonth === +month
-  })
+  await addDelay()
+  const articles = db
+    .prepare(
+      "SELECT * FROM news WHERE strftime('%Y', date) = ? AND strftime('%m', date) = ? ORDER BY date DESC"
+    )
+    .all(year, month)
+  return articles
 }
