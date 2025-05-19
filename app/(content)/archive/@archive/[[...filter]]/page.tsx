@@ -30,8 +30,8 @@ export default async function FilteredNewsPage({
     links = []
   }
 
-  const isNoNewsForYear = selectedYear && !availableArticleYears.includes(+selectedYear)
-  const isNoNewsForMonth = selectedMonth && !availableArticleMonths.includes(+selectedMonth)
+  const isNoNewsForYear = selectedYear && !availableArticleYears.includes(selectedYear)
+  const isNoNewsForMonth = selectedMonth && !availableArticleMonths.includes(selectedMonth)
 
   if(isNoNewsForMonth || isNoNewsForYear) {
     throw new Error('invalid filter')

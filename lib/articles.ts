@@ -64,7 +64,7 @@ export const getArticlesForYear = async (year: string) => {
     .prepare(
       "SELECT * FROM news WHERE strftime('%Y', date) = ? ORDER BY date DESC"
     )
-    .all(year)
+    .all(year) as Article[]
   return articles
 }
 
@@ -78,6 +78,6 @@ export const getArticleForYearAndMonth = async (
     .prepare(
       "SELECT * FROM news WHERE strftime('%Y', date) = ? AND strftime('%m', date) = ? ORDER BY date DESC"
     )
-    .all(year, month)
+    .all(year, month) as Article[]
   return articles
 }

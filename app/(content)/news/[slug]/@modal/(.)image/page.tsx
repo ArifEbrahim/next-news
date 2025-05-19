@@ -1,7 +1,6 @@
-'use client'
-
+import ModalBackdrop from '@/components/modal-backdrop'
 import { getOneArticle } from '@/lib/articles'
-import { notFound, useRouter } from 'next/navigation'
+import { notFound } from 'next/navigation'
 
 export default async function InterceptedImagePage({
   params
@@ -10,12 +9,11 @@ export default async function InterceptedImagePage({
 }) {
   const { slug } = await params
   const article = await getOneArticle(slug)
-  const router = useRouter()
   if (!article) notFound()
 
   return (
     <>
-      <div className="model-backdrop" onClick={router.back}/>
+      <ModalBackdrop />
       <dialog className="modal" open>
         <div className="fullscreen-image">
           <img src={`/images/news/${article.image}`} alt={article.title} />
