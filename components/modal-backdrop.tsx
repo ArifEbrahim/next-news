@@ -1,9 +1,9 @@
-import { useRouter } from "next/navigation"
+'use client'
+
+import { useRouter } from 'next/navigation'
 
 export default function ModalBackdrop() {
   const router = useRouter()
 
-  return (
-          <div className="model-backdrop" onClick={router.back}/>
-  )
+  return <div className="model-backdrop" onClick={router.back} />
 }
